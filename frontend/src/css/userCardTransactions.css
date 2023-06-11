@@ -1,0 +1,53 @@
+.chart-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.half-width-chart {
+  width: calc(25% - 0.5rem);
+}
+
+
+.graph_width_chart {
+    width: calc(75% - 0.5rem);
+  }
+  
+
+.filters-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.filters-section > div {
+  margin-right: 1rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+.table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.filter_button {
+  margin-left: 50%;
+}

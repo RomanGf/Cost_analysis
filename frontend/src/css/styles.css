@@ -1,0 +1,107 @@
+.customers--list {
+    margin-top: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+
+.ChatCss {
+  display: flex;
+  flex-direction: column;
+}
+
+.first_two_chat{
+  display: flex;
+  flex-direction: row;
+}
+
+.last_two_chat{
+  display: flex;
+  flex-direction: row;
+}
+.navbar-dark {
+  background-color: black;
+  left: -12px;
+  width: 101%;
+}
+
+.userEmail {
+  color: rgba(255,255,255,.5);
+}
+
+#mccSelect {
+  width: 700px;
+}
+
+
+.daterangelicker_filter {
+  display: flex;
+  flex-direction: column;
+}
+
+#log_out {
+  margin-left: -120px;
+}
+div {
+  margin-bottom: 10px;
+}
+
+/* Стилізація мітки */
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* Стилізація інпута */
+input[type="number"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 700px;
+  font-size: 14px;
+}
+
+.transaction-details {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.transaction-details h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.transaction-details p {
+  margin-bottom: 5px;
+}
+
+.transaction-details label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.transaction-details input {
+  margin-right: 5px;
+}
+
