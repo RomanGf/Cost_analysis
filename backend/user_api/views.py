@@ -70,7 +70,7 @@ class UserLogout(APIView):
 
 class UserView(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (SessionAuthentication,)
 
     def get(self, request):
@@ -123,7 +123,7 @@ class UsersList(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class UserDetailAPIView(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (BasicAuthentication,)
 
     # checkhere'
@@ -166,7 +166,7 @@ class UserDetailAPIView(APIView):
 
 class UsersCardsView(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (BasicAuthentication,)
 
     def get_object(self, pk):
@@ -219,7 +219,7 @@ class UsersCardsView(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class UserCardTransactionsView(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (BasicAuthentication,)
 
     def get_user(self, pk):
@@ -371,7 +371,7 @@ class UserCardTransactionsView(APIView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class TransactionDetail(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (BasicAuthentication,)
 
     def get(self, request, id):
@@ -399,7 +399,7 @@ class TransactionDetail(APIView):
 @method_decorator(csrf_exempt, name='dispatch')
 class TransactionsCompareView(APIView):
 
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.AllowAny,)
     authentication_classes = (BasicAuthentication,)
 
     def get_cards(self, monobank_id):
