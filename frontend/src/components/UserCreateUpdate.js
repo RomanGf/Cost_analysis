@@ -47,7 +47,7 @@ const UserUpdate = () => {
         <div className="form-group">
           <label>Monobank Token:</label>
           <input className="form-control" type="text" ref={token_monobankRef} />
-          <input className="btn btn-primary" type="submit" value="Submit" />
+          <input className="btn btn-primary" type="submit" value="Додати" />
         </div>
       </form>
     </div>

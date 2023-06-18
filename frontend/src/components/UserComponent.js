@@ -29,7 +29,7 @@ const ViewUserProfile = (props) => {
   return (
     <Card className="mt-2 border-0 rounded-0 shadow-sm">
       <CardBody>
-        <h3 className="text-uppercase">User Information</h3>
+        <h3 className="text-uppercase">Інформація користувача</h3>
 
         <Container className="text-center">
           <img
@@ -42,15 +42,15 @@ const ViewUserProfile = (props) => {
         <Table responsive striped hover bordered={true} className="text-center mt-5">
           <tbody>
             <tr>
-              <td>USER NAME</td>
+              <td>Ім'я</td>
               <td>{user.username}</td>
             </tr>
             <tr>
-              <td>USER EMAIL</td>
+              <td>Елкктрона пошта</td>
               <td>{user.email}</td>
             </tr>
             <tr>
-              <td>USER MONOBANK TOKEN</td>
+              <td>Токен monobank</td>
               <td>{user.token_monobank}</td>
             </tr>
           </tbody>

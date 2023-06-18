@@ -185,7 +185,6 @@ class UsersCardsView(APIView):
         headars = {'X-Token': user.token_monobank}
 
         cards = get_user_data(token=headars)
-
         if cards is not None:
             for card in cards:
                 try:
@@ -274,8 +273,11 @@ class UserCardTransactionsView(APIView):
         if amount_lt:
             query.update({'amount__gt': amount_lt})
 
+        if start_date and end_date:
+            query.update({'time__range': [start_date, end_date]})
         transactions_chat_js = Transaction.objects.filter(**query).filter(
             card__id=card_id).values('mcc').annotate(total_amount=Sum('amount'))
+        print(transactions_chat_js)
 
         return transactions_chat_js
 
@@ -360,9 +362,9 @@ class UserCardTransactionsView(APIView):
                 end_date, date_format).timestamp()
 
         transactions = self.get_transactions(
-            card_id=card.id, mcc=mcc, amount_gt=amount_gt, amount_lt=amount_lt)
+            card_id=card.id, mcc=mcc, amount_gt=amount_gt, amount_lt=amount_lt, start_date=start_date, end_date=end_date)
         transactions_chat_js = self.get_transactions_chat_js(
-            card_id=card.id, mcc=mcc, amount_gt=amount_gt, amount_lt=amount_lt)
+            card_id=card.id, mcc=mcc, amount_gt=amount_gt, amount_lt=amount_lt, start_date=start_date, end_date=end_date)
 
         data = self.get_serialized_data(transactions, transactions_chat_js)
 
@@ -377,11 +379,14 @@ class TransactionDetail(APIView):
     def get(self, request, id):
         transaction = Transaction.objects.filter(id=id)[0]
         transaction.amount = int(transaction.amount) / 100
-        transaction.time = datetime.datetime.fromtimestamp(transaction.time).strftime('%Y-%m-%d')
 
         serializer = TransactionDetailSerializer(
             transaction,  context={'request': request})
-        return Response(serializer.data)
+        data = {
+            'transaction': serializer.data,
+            'mcc_dict': MCC_DICT
+        }
+        return Response(data=data)
 
     def post(self, request, id):
         comment = request.data.get('comment')
@@ -389,9 +394,15 @@ class TransactionDetail(APIView):
         if transaction:
             transaction.comment = comment
             transaction.save()
+
             serializer = TransactionDetailSerializer(
                 transaction, context={'request': request})
-            return Response(serializer.data)
+
+            data = {
+                'transaction': serializer.data,
+                'mcc_dict': MCC_DICT
+            }
+            return Response(data=data)
         else:
             return Response({'error': 'Transaction not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -415,11 +426,9 @@ class TransactionsCompareView(APIView):
 
         if start_date and end_date:
             query.update({'time__range': [start_date, end_date]})
-        print(start_date, end_date)
 
         transactions_chat_js = Transaction.objects.filter(**query).filter(
             card__id=card_id).values('mcc').annotate(total_amount=Sum('amount'))
-        print(transactions_chat_js)
         return transactions_chat_js
 
     def get_serialized_data(self,  transactions_chat_js, transactions_chat_js_second):
@@ -477,15 +486,20 @@ class TransactionsCompareView(APIView):
         end_date_first = request.data.get('endDateFirst')
         start_date_second = request.data.get('startDateSecond')
         end_date_second = request.data.get('endDateSecond')
+        print(request.data)
         card = self.get_cards(monobank_id=id_monobank)
+
         start_date_first, end_date_first = self.get_date(
             start_date=start_date_first, end_date=end_date_first)
         start_date_second, end_date_second = self.get_date(
             start_date=start_date_second, end_date=end_date_second)
+
         transactions_chat_js_first = self.get_transactions_chat_js(
             card_id=card.id, start_date=start_date_first, end_date=end_date_first)
         transactions_chat_js_second = self.get_transactions_chat_js(
             card_id=card.id, start_date=start_date_second, end_date=end_date_second)
+
         data = self.get_serialized_data(
             transactions_chat_js_first, transactions_chat_js_second)
+
         return Response(data=data)

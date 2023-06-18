@@ -34,6 +34,9 @@ function App() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     client
@@ -49,16 +52,45 @@ function App() {
 
   function update_form_btn() {
     if (registrationToggle) {
-      document.getElementById("form_btn").innerHTML = "Register";
+      document.getElementById("form_btn").innerHTML = "Реєстрація";
       setRegistrationToggle(false);
     } else {
-      document.getElementById("form_btn").innerHTML = "Log in";
+      document.getElementById("form_btn").innerHTML = "Вхід";
       setRegistrationToggle(true);
     }
   }
 
   function submitRegistration(e) {
     e.preventDefault();
+
+    // Валідація поля "Email"
+    if (!email) {
+      setEmailError("Введіть електрону пошту");
+      return;
+    }
+    // Перевірка правильного формату електронної пошти
+    if (!validateEmail(email)) {
+      setEmailError("Введіть коректну електронну пошту");
+      return;
+    }
+
+    // Валідація поля "Username"
+    if (!username) {
+      setUsernameError("Введіть псевдонім");
+      return;
+    }
+
+    // Валідація поля "Password"
+    if (!password) {
+      setPasswordError("Введіть пароль");
+      return;
+    }
+    // Перевірка довжини пароля (більше 8 символів)
+    if (password.length < 8) {
+      setPasswordError("Пароль повинен містити щонайменше 8 символів");
+      return;
+    }
+
     client
       .post("/api/register", {
         email: email,
@@ -72,13 +104,44 @@ function App() {
             password: password,
           })
           .then(function (res) {
-            setUser(res.data.user);
+            setUser(res.data);
             setCurrentUser(true);
           });
       });
   }
+
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  }
+
   function submitLogin(e) {
     e.preventDefault();
+
+    e.preventDefault();
+
+    // Валідація поля "Email"
+    if (!email) {
+      setEmailError("Введіть електрону пошту");
+      return;
+    }
+    // Перевірка правильного формату електронної пошти
+    if (!validateEmail(email)) {
+      setEmailError("Введіть коректну електронну пошту");
+      return;
+    }
+
+    // Валідація поля "Password"
+    if (!password) {
+      setPasswordError("Введіть пароль");
+      return;
+    }
+    // Перевірка довжини пароля (більше 8 символів)
+    if (password.length < 8) {
+      setPasswordError("Пароль повинен містити щонайменше 8 символів");
+      return;
+    }
+
     client
       .post("/api/login", {
         email: email,
@@ -115,13 +178,12 @@ function App() {
                 <Nav.Link as={Link} to="/user_profile">
                   {user.email}
                 </Nav.Link>
-
               </Nav>
 
               <Navbar.Text>
                 <form onSubmit={(e) => submitLogout(e)}>
                   <Button type="submit" variant="light" id="log_out">
-                    Log out
+                    Вийти
                   </Button>
                 </form>
               </Navbar.Text>
@@ -131,7 +193,11 @@ function App() {
           <div className="content">
             <Routes>
               <Route path="/" exact element={<ViewUserProfile user={user} />} />
-              <Route path="/user_profile" exact element={<ViewUserProfile user={user} />} />
+              <Route
+                path="/user_profile"
+                exact
+                element={<ViewUserProfile user={user} />}
+              />
               <Route path="/user/:pk" element={<UserUpdate />} />
               <Route path="/user/" exact element={<UserUpdate />} />
               <Route
@@ -176,15 +242,19 @@ function App() {
         <div className="center">
           <Form onSubmit={(e) => submitRegistration(e)}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>Електрона пошта</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError("");
+                }}
               />
+              {emailError && <div className="error">{emailError}</div>}
               <Form.Text className="text-muted">
-                Ми нікому не поширим твою електрону пошту.
+                Ми нікому не поширимо вашу електрону пошту.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicUsername">
@@ -193,8 +263,12 @@ function App() {
                 type="text"
                 placeholder="Enter username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setUsernameError("");
+                }}
               />
+              {usernameError && <div className="error">{usernameError}</div>}
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>Пароль</Form.Label>
@@ -202,8 +276,12 @@ function App() {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError("");
+                }}
               />
+              {passwordError && <div className="error">{passwordError}</div>}
             </Form.Group>
             <Button variant="primary" type="submit" className="register_button">
               Підтвердити
@@ -222,7 +300,7 @@ function App() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Form.Text className="text-muted">
-              Ми нікому не поширим твою електрону пошту.
+                Ми нікому не поширим твою електрону пошту.
               </Form.Text>
             </Form.Group>
             <Form.Group className="mb-3" controlId="formBasicPassword">

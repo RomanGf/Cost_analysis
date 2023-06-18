@@ -21,27 +21,17 @@ def get_user_data(token):
 
 def get_transaction_date(headers, card_id=None, from_date=None, to_date=None):
     
-# Отримуємо номер потрібного рахунку
-    # accounts = get_user_data(token=headers)
-    # account_id = cards_id  # Вибираємо перший рахунок зі списку
-
-    # Визначаємо дати початку та кінця періоду, для якого хочемо отримати витрати та прибутки
     last_month = datetime.now() - timedelta(days=30)
     from_date = int(last_month.timestamp())
     to_date = int(datetime.now().timestamp())
 
-    # Формуємо URL-адресу запиту з необхідними параметрами
     url = url_transaction_info.format(account=card_id, from_date=from_date, to_date=to_date)
 
-    # Виконуємо запит і отримуємо відповідь в форматі JSON
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
         data = response.json()
         print(data)
         return data
-        # operations = data['operations']
-        # for operation in operations:
-        #     print(operation)
     else:
         print('Помилка запиту:', response.status_code)

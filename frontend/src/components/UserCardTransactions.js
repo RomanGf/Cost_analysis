@@ -131,6 +131,7 @@ const UserCardTransactionsList = () => {
         .then((result) => {
           setTransactions(result.transactions);
           setTransactionsChart(result.transactions_chat_js);
+          console.log(result);
           setMccDict(result.mcc_dict);
         });
     }

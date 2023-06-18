@@ -7,6 +7,7 @@ const usersService = new UsersService();
 
 const TransactionDetail = () => {
   const [transaction, setTransaction] = useState();
+  const [mccDict, setMccDict] = useState([]);
   const [comment, setComment] = useState("");
   const { id } = useParams();
 
@@ -17,9 +18,10 @@ const TransactionDetail = () => {
   const fetchData = async () => {
     try {
       const result = await usersService.transactionDetail(id);
-      setTransaction(result);
+      setTransaction(result.transaction);
+      setMccDict(result.mcc_dict);
     } catch (error) {
-      // Обробка помилки отримання даних
+      console.log(error);
     }
   };
 
@@ -34,7 +36,7 @@ const TransactionDetail = () => {
   const handleSubmitComment = (event) => {
     event.preventDefault();
     usersService.transactionDetailPost(id, comment).then((result) => {
-      setTransaction(result);
+      setTransaction(result.transaction);
     });
     setComment("");
   };
@@ -47,7 +49,7 @@ const TransactionDetail = () => {
       <p>Час: {transaction?.time}</p>
       <p>Опис: {transaction?.description}</p>
       <p>Сума: {transaction?.amount}</p>
-      <p>MCC: {transaction?.mcc}</p>
+      <p>MCC: {mccDict[transaction?.mcc]}</p>
       <p>Коментар: {transaction?.comment}</p>
 
       <form onSubmit={handleSubmitComment}>

@@ -1,3 +1,4 @@
+import datetime
 from django.forms import ValidationError
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
@@ -77,8 +78,14 @@ class TransactionViewChatSerializer(serializers.ModelSerializer):
         fields = ('mcc', 'total_amount', 'time')
 	
 class TransactionDetailSerializer(serializers.ModelSerializer):
-    time = serializers.DateTimeField()
+    time = serializers.SerializerMethodField('get_formatted_time')	
 
     class Meta:
         model = Transaction
         fields = ('__all__')
+
+    def get_formatted_time(self, obj):
+        timestamp = obj.time
+        date_format = "%Y-%m-%d %H:%M:%S"
+        formatted_time = datetime.datetime.fromtimestamp(timestamp).strftime(date_format)
+        return formatted_time
